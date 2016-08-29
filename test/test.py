@@ -10,5 +10,6 @@ class test:
 import numpy as np
 import pandas as pd
 from wec_python import *
+from wec_python.test import *
 import os
 print(os.getcwd())

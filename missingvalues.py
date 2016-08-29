@@ -1,12 +1,15 @@
 import math
 import pandas as pd
 from sklearn.linear_model import LinearRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import scale
 
 class missingvalues:
-    def __init__(self, df,Target,IndicatorCol):
+    def __init__(self, df,Target,IndicatorCol,k):
         self.df = df
         self.Target = Target
         self.IndicatorCol = IndicatorCol
+        self.k = k
             
     def ValueImputationMedian(df,Target,IndicatorCol=False):
         if IndicatorCol == True:
@@ -26,7 +29,7 @@ class missingvalues:
         
         return(df)    
 
-    def ValueImputationRegression(df,target):     
+    def ValueImputationKNN(df,target,k):     
         
         # obtain missing values
         impute = df[pd.isnull(df).any(axis=1)]
@@ -40,9 +43,9 @@ class missingvalues:
         features = df.drop(target, axis=1)
 
         # Create linear regression object
-        regressor = LinearRegression()
-        regressor.fit(features,target_)
-        predictions = regressor.predict(impute)
+        knn=KNeighborsClassifier(n_neighbors=k)
+        knn.fit(scale(features),target_)
+        predictions = knn.predict(scale(impute))
         impute[target] = predictions
         
         # bind data
